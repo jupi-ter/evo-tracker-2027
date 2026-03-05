@@ -1,8 +1,8 @@
-'use client';
+"use client";
 
-import { useState, useRef } from 'react';
-import { useRouter } from 'next/navigation';
-import { CurrencyAmount } from '@/app/_components/CurrencyAmount';
+import { useState, useRef } from "react";
+import { useRouter } from "next/navigation";
+import { CurrencyAmount } from "@/app/_components/CurrencyAmount";
 
 type BudgetItem = {
   id: number;
@@ -13,8 +13,8 @@ type BudgetItem = {
 export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
   const router = useRouter();
   const [items, setItems] = useState<BudgetItem[]>(initialItems);
-  const [newItem, setNewItem] = useState('');
-  const [newPrice, setNewPrice] = useState('');
+  const [newItem, setNewItem] = useState("");
+  const [newPrice, setNewPrice] = useState("");
   const [adding, setAdding] = useState(false);
   const idCounter = useRef(-1);
 
@@ -33,15 +33,18 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
 
     // Optimistic update
     setItems((prev) => [...prev, optimistic]);
-    setNewItem('');
-    setNewPrice('');
+    setNewItem("");
+    setNewPrice("");
     setAdding(true);
 
     try {
-      await fetch('/api/budget', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ item: optimistic.item, price: parseFloat(optimistic.price) }),
+      await fetch("/api/budget", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          item: optimistic.item,
+          price: parseFloat(optimistic.price),
+        }),
       });
       router.refresh();
     } catch {
@@ -57,9 +60,9 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
     setItems((prev) => prev.filter((i) => i.id !== id));
 
     try {
-      await fetch('/api/budget', {
-        method: 'DELETE',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/budget", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ id }),
       });
       router.refresh();
@@ -107,8 +110,12 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
       <div className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)]">
         {items.length === 0 ? (
           <div className="p-8 text-center">
-            <p className="font-black text-xl text-gray-500">No budget items yet.</p>
-            <p className="font-bold text-gray-400 mt-1">Add your first item above.</p>
+            <p className="font-black text-xl text-gray-500">
+              No budget items yet.
+            </p>
+            <p className="font-bold text-gray-400 mt-1">
+              Add your first item above.
+            </p>
           </div>
         ) : (
           <div className="overflow-x-auto">
@@ -128,16 +135,17 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
                 {items.map((item, idx) => (
                   <tr
                     key={item.id}
-                    className={`border-b-2 border-black ${idx % 2 === 0 ? 'bg-white' : 'bg-gray-50'}`}
+                    className={`border-b-2 border-black ${idx % 2 === 0 ? "bg-white" : "bg-gray-50"}`}
                   >
-                    <td className="px-6 py-4 font-bold text-base">{item.item}</td>
+                    <td className="px-6 py-4 font-bold text-base">
+                      {item.item}
+                    </td>
                     <td className="px-6 py-4 font-bold text-right">
                       <CurrencyAmount amount={parseFloat(item.price)} />
                     </td>
                     <td className="px-4 py-4 text-right">
                       <button
                         onClick={() => handleDelete(item.id)}
-                        disabled={item.id < 0}
                         className="border-2 border-black bg-pink-400 font-black px-3 py-1 text-sm shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-none transition-all cursor-pointer disabled:opacity-40"
                       >
                         Delete
@@ -152,7 +160,9 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
 
         {/* Total */}
         <div className="border-t-4 border-black bg-yellow-300 px-6 py-4 flex items-center justify-between">
-          <span className="font-black text-lg uppercase tracking-wide">Total</span>
+          <span className="font-black text-lg uppercase tracking-wide">
+            Total
+          </span>
           <CurrencyAmount amount={total} className="font-black text-2xl" />
         </div>
       </div>
