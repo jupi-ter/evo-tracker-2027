@@ -1,0 +1,50 @@
+import { auth } from '@/auth';
+import { db } from '@/lib/db';
+import { savings } from '@/lib/schema';
+import { eq } from 'drizzle-orm';
+import { redirect } from 'next/navigation';
+import Link from 'next/link';
+import { SavingsClient } from './SavingsClient';
+
+export default async function SavingsPage() {
+  const session = await auth();
+  if (!session?.user?.id) redirect('/login');
+
+  const savingsRow = await db
+    .select()
+    .from(savings)
+    .where(eq(savings.userId, Number(session.user.id)))
+    .then((r) => r[0] ?? null);
+
+  const currentSavings = savingsRow ? parseFloat(savingsRow.amount) : 0;
+
+  return (
+    <div className="min-h-[calc(100vh-64px)] bg-white">
+      {/* Header */}
+      <div className="border-b-4 border-black bg-green-400 px-4 sm:px-8 py-6">
+        <div className="max-w-3xl mx-auto flex items-center justify-between gap-4">
+          <div>
+            <Link
+              href="/"
+              className="font-bold text-sm border-b-2 border-black hover:bg-yellow-300 transition-colors"
+            >
+              &larr; Home
+            </Link>
+            <h1 className="font-black text-4xl sm:text-5xl mt-2 leading-none">SAVINGS</h1>
+          </div>
+          <Link
+            href="/budget"
+            className="border-2 border-black bg-pink-400 font-bold px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all text-sm whitespace-nowrap"
+          >
+            My Budget &rarr;
+          </Link>
+        </div>
+      </div>
+
+      {/* Content */}
+      <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
+        <SavingsClient initialSavings={currentSavings} />
+      </div>
+    </div>
+  );
+}
