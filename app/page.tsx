@@ -1,13 +1,13 @@
-import { auth, signOut } from '@/auth';
-import { db } from '@/lib/db';
-import { savings, budget } from '@/lib/schema';
-import { eq } from 'drizzle-orm';
-import Link from 'next/link';
-import { CurrencyAmount } from './_components/CurrencyAmount';
+import { auth, signOut } from "@/auth";
+import { db } from "@/lib/db";
+import { savings, budget } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import Link from "next/link";
+import { CurrencyAmount } from "./_components/CurrencyAmount";
 
 async function doSignOut() {
-  'use server';
-  await signOut({ redirectTo: '/' });
+  "use server";
+  await signOut({ redirectTo: "/" });
 }
 
 export default async function HomePage() {
@@ -62,7 +62,7 @@ export default async function HomePage() {
                   type="submit"
                   className="border-2 border-black bg-pink-400 font-bold px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer text-sm"
                 >
-                  Log Out
+                  EXCESSO DE RESENHAS
                 </button>
               </form>
             </>
@@ -94,13 +94,13 @@ export default async function HomePage() {
             />
             {gap <= 0 && (
               <p className="font-bold text-green-600 mt-4 text-lg">
-                Goal reached! You&apos;re ahead by{' '}
+                Goal reached! You&apos;re ahead by{" "}
                 <CurrencyAmount amount={Math.abs(gap)} />
               </p>
             )}
             {!hasSavings && (
               <p className="font-bold text-sm mt-3 border-2 border-black bg-yellow-300 px-4 py-2 inline-block">
-                No savings tracked yet —{' '}
+                No savings tracked yet —{" "}
                 <Link href="/savings" className="underline font-black">
                   set up your savings!
                 </Link>
@@ -117,7 +117,7 @@ export default async function HomePage() {
                 href="/savings"
                 className="border-2 border-black bg-green-400 font-bold px-5 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all text-center"
               >
-                {hasSavings ? 'Update Savings' : 'Set Up Savings'}
+                {hasSavings ? "Update Savings" : "Set Up Savings"}
               </Link>
             </div>
           </div>
@@ -129,7 +129,9 @@ export default async function HomePage() {
                 className="flex-1 border-4 border-black bg-pink-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 <p className="font-black text-2xl mb-1">Set up your budget!</p>
-                <p className="font-bold">Add the things you&apos;re saving for &rarr;</p>
+                <p className="font-bold">
+                  Add the things you&apos;re saving for &rarr;
+                </p>
               </Link>
             )}
             {isAuthed && !hasSavings && (
@@ -138,7 +140,9 @@ export default async function HomePage() {
                 className="flex-1 border-4 border-black bg-green-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6 hover:translate-x-[3px] hover:translate-y-[3px] hover:shadow-[3px_3px_0px_0px_rgba(0,0,0,1)] transition-all"
               >
                 <p className="font-black text-2xl mb-1">Set up your savings!</p>
-                <p className="font-bold">Track how much you&apos;ve saved &rarr;</p>
+                <p className="font-bold">
+                  Track how much you&apos;ve saved &rarr;
+                </p>
               </Link>
             )}
             {!isAuthed && (
