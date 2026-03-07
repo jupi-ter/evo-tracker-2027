@@ -1,14 +1,14 @@
-import { auth } from '@/auth';
-import { db } from '@/lib/db';
-import { savings } from '@/lib/schema';
-import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { SavingsClient } from './SavingsClient';
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { savings } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { SavingsClient } from "./SavingsClient";
 
 export default async function SavingsPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect('/login');
+  if (!session?.user?.id) redirect("/login");
 
   const savingsRow = await db
     .select()
@@ -17,6 +17,7 @@ export default async function SavingsPage() {
     .then((r) => r[0] ?? null);
 
   const currentSavings = savingsRow ? parseFloat(savingsRow.amount) : 0;
+  const userNationality = session.user.nationality ?? null;
 
   return (
     <div className="min-h-[calc(100vh-64px)] bg-white">
@@ -30,7 +31,9 @@ export default async function SavingsPage() {
             >
               &larr; Home
             </Link>
-            <h1 className="font-black text-4xl sm:text-5xl mt-2 leading-none">SAVINGS</h1>
+            <h1 className="font-black text-4xl sm:text-5xl mt-2 leading-none">
+              SAVINGS
+            </h1>
           </div>
           <Link
             href="/budget"
@@ -43,7 +46,10 @@ export default async function SavingsPage() {
 
       {/* Content */}
       <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
-        <SavingsClient initialSavings={currentSavings} />
+        <SavingsClient
+          initialSavings={currentSavings}
+          nacionalidade={userNationality}
+        />
       </div>
     </div>
   );

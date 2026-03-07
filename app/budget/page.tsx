@@ -1,14 +1,14 @@
-import { auth } from '@/auth';
-import { db } from '@/lib/db';
-import { budget } from '@/lib/schema';
-import { eq } from 'drizzle-orm';
-import { redirect } from 'next/navigation';
-import Link from 'next/link';
-import { BudgetClient } from './BudgetClient';
+import { auth } from "@/auth";
+import { db } from "@/lib/db";
+import { budget } from "@/lib/schema";
+import { eq } from "drizzle-orm";
+import { redirect } from "next/navigation";
+import Link from "next/link";
+import { BudgetClient } from "./BudgetClient";
 
 export default async function BudgetPage() {
   const session = await auth();
-  if (!session?.user?.id) redirect('/login');
+  if (!session?.user?.id) redirect("/login");
 
   const budgetRows = await db
     .select()
@@ -33,7 +33,9 @@ export default async function BudgetPage() {
             >
               &larr; Home
             </Link>
-            <h1 className="font-black text-4xl sm:text-5xl mt-2 leading-none">BUDGET</h1>
+            <h1 className="font-black text-4xl sm:text-5xl mt-2 leading-none">
+              BUDGET
+            </h1>
           </div>
           <Link
             href="/savings"
@@ -46,7 +48,10 @@ export default async function BudgetPage() {
 
       {/* Content */}
       <div className="max-w-4xl mx-auto px-4 sm:px-8 py-8">
-        <BudgetClient initialItems={items} />
+        <BudgetClient
+          initialItems={items}
+          nacionalidade={session.user.nationality}
+        />
       </div>
     </div>
   );

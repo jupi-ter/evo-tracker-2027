@@ -13,6 +13,7 @@ async function doSignOut() {
 export default async function HomePage() {
   const session = await auth();
   const isAuthed = !!session?.user?.id;
+  const userNationality = session?.user?.nationality ?? null;
 
   let savingsAmount: number | null = null;
   let budgetItems: { id: number; item: string; price: string }[] = [];
@@ -90,12 +91,16 @@ export default async function HomePage() {
             </p>
             <CurrencyAmount
               amount={gap > 0 ? gap : 0}
+              nacionalidade={userNationality}
               className="font-black text-5xl sm:text-7xl block"
             />
             {gap <= 0 && (
               <p className="font-bold text-green-600 mt-4 text-lg">
                 Goal reached! You&apos;re ahead by{" "}
-                <CurrencyAmount amount={Math.abs(gap)} />
+                <CurrencyAmount
+                  amount={Math.abs(gap)}
+                  nacionalidade={userNationality}
+                />
               </p>
             )}
             {!hasSavings && (

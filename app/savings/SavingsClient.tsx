@@ -1,16 +1,24 @@
-'use client';
+"use client";
 
-import { useState, useRef, useCallback } from 'react';
-import { useRouter } from 'next/navigation';
-import { CurrencyAmount } from '@/app/_components/CurrencyAmount';
+import { useState, useRef, useCallback } from "react";
+import { useRouter } from "next/navigation";
+import { CurrencyAmount } from "@/app/_components/CurrencyAmount";
+
+type SavingsClientProps = {
+  initialSavings: number;
+  nacionalidade?: string; // opcional
+};
 
 type Bill = { id: number; x: number; y: number; delay: number };
 
-export function SavingsClient({ initialSavings }: { initialSavings: number }) {
+export function SavingsClient({
+  initialSavings,
+  nacionalidade,
+}: SavingsClientProps) {
   const router = useRouter();
   const [savings, setSavings] = useState(initialSavings);
-  const [setAmount, setSetAmount] = useState('');
-  const [addAmount, setAddAmount] = useState('');
+  const [setAmount, setSetAmount] = useState("");
+  const [addAmount, setAddAmount] = useState("");
   const [settingBusy, setSettingBusy] = useState(false);
   const [addingBusy, setAddingBusy] = useState(false);
   const [bills, setBills] = useState<Bill[]>([]);
@@ -31,7 +39,9 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
     setBills((prev) => [...prev, ...newBills]);
 
     setTimeout(() => {
-      setBills((prev) => prev.filter((b) => !newBills.some((nb) => nb.id === b.id)));
+      setBills((prev) =>
+        prev.filter((b) => !newBills.some((nb) => nb.id === b.id)),
+      );
     }, 1200);
   }, []);
 
@@ -41,12 +51,12 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
     setSettingBusy(true);
     const amount = parseFloat(setAmount);
     setSavings(amount);
-    setSetAmount('');
+    setSetAmount("");
 
     try {
-      await fetch('/api/savings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/savings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount }),
       });
       router.refresh();
@@ -65,13 +75,13 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
     const toAdd = parseFloat(addAmount);
     const newTotal = savings + toAdd;
     setSavings(newTotal);
-    setAddAmount('');
+    setAddAmount("");
     triggerBills();
 
     try {
-      await fetch('/api/savings', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+      await fetch("/api/savings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ amount: newTotal }),
       });
       router.refresh();
@@ -104,7 +114,15 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
             aria-hidden="true"
           >
             <rect width="44" height="24" fill="#16a34a" />
-            <rect x="1" y="1" width="42" height="22" fill="none" stroke="#15803d" strokeWidth="1" />
+            <rect
+              x="1"
+              y="1"
+              width="42"
+              height="22"
+              fill="none"
+              stroke="#15803d"
+              strokeWidth="1"
+            />
             <text
               x="22"
               y="14"
@@ -125,8 +143,14 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
 
       {/* Current savings display */}
       <div className="border-4 border-black bg-green-400 shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-8 text-center">
-        <p className="font-black text-sm uppercase tracking-widest mb-2">Current Savings</p>
-        <CurrencyAmount amount={savings} className="font-black text-5xl sm:text-7xl block" />
+        <p className="font-black text-sm uppercase tracking-widest mb-2">
+          Current Savings
+        </p>
+        <CurrencyAmount
+          amount={savings}
+          nacionalidade={nacionalidade}
+          className="font-black text-5xl sm:text-7xl block"
+        />
       </div>
 
       {/* Two sections side by side */}
@@ -134,7 +158,9 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
         {/* Set amount */}
         <div className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6">
           <h2 className="font-black text-2xl mb-1 uppercase">Set Amount</h2>
-          <p className="font-bold text-sm text-gray-600 mb-4">Overwrite your savings total.</p>
+          <p className="font-bold text-sm text-gray-600 mb-4">
+            Overwrite your savings total.
+          </p>
           <form onSubmit={handleSet} className="flex flex-col gap-3">
             <input
               type="number"
@@ -151,7 +177,7 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
               disabled={settingBusy}
               className="border-2 border-black bg-yellow-300 font-black px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-50"
             >
-              {settingBusy ? 'Setting...' : 'Set'}
+              {settingBusy ? "Setting..." : "Set"}
             </button>
           </form>
         </div>
@@ -159,7 +185,9 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
         {/* Add to savings */}
         <div className="border-4 border-black bg-white shadow-[6px_6px_0px_0px_rgba(0,0,0,1)] p-6">
           <h2 className="font-black text-2xl mb-1 uppercase">Add to Savings</h2>
-          <p className="font-bold text-sm text-gray-600 mb-4">Add on top of your current total.</p>
+          <p className="font-bold text-sm text-gray-600 mb-4">
+            Add on top of your current total.
+          </p>
           <form onSubmit={handleAdd} className="flex flex-col gap-3">
             <input
               type="number"
@@ -177,7 +205,7 @@ export function SavingsClient({ initialSavings }: { initialSavings: number }) {
               disabled={addingBusy}
               className="border-2 border-black bg-green-400 font-black px-6 py-3 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all cursor-pointer disabled:opacity-50"
             >
-              {addingBusy ? 'Adding...' : '+ Add'}
+              {addingBusy ? "Adding..." : "+ Add"}
             </button>
           </form>
         </div>

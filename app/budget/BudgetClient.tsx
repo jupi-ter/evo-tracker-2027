@@ -3,6 +3,7 @@
 import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { CurrencyAmount } from "@/app/_components/CurrencyAmount";
+import { auth } from "@/auth";
 
 type BudgetItem = {
   id: number;
@@ -10,7 +11,15 @@ type BudgetItem = {
   price: string;
 };
 
-export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
+type BudgetClientProps = {
+  initialItems: BudgetItem[];
+  nacionalidade?: string;
+};
+
+export function BudgetClient({
+  initialItems,
+  nacionalidade,
+}: BudgetClientProps) {
   const router = useRouter();
   const [items, setItems] = useState<BudgetItem[]>(initialItems);
   const [newItem, setNewItem] = useState("");
@@ -19,6 +28,8 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
   const idCounter = useRef(-1);
 
   const total = items.reduce((sum, i) => sum + parseFloat(i.price), 0);
+
+  // ... resto do código permanece igual
 
   async function handleAdd(e: React.FormEvent) {
     e.preventDefault();
@@ -141,7 +152,10 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
                       {item.item}
                     </td>
                     <td className="px-6 py-4 font-bold text-right">
-                      <CurrencyAmount amount={parseFloat(item.price)} />
+                      <CurrencyAmount
+                        amount={parseFloat(item.price)}
+                        nacionalidade={nacionalidade}
+                      />
                     </td>
                     <td className="px-4 py-4 text-right">
                       <button
@@ -163,7 +177,11 @@ export function BudgetClient({ initialItems }: { initialItems: BudgetItem[] }) {
           <span className="font-black text-lg uppercase tracking-wide">
             Total
           </span>
-          <CurrencyAmount amount={total} className="font-black text-2xl" />
+          <CurrencyAmount
+            amount={total}
+            nacionalidade={nacionalidade}
+            className="font-black text-2xl"
+          />
         </div>
       </div>
     </div>
