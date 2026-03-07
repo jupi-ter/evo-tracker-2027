@@ -48,7 +48,7 @@ export default async function SavingsPage() {
       <div className="max-w-3xl mx-auto px-4 sm:px-8 py-8">
         <SavingsClient
           initialSavings={currentSavings}
-          nacionalidade={userNationality}
+          nacionalidade={userNationality ?? undefined}
         />
       </div>
     </div>

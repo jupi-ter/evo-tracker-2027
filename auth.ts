@@ -5,6 +5,26 @@ import { users } from "@/lib/schema";
 import { eq } from "drizzle-orm";
 import bcrypt from "bcryptjs";
 
+type DBUser = {
+  id: number;
+  name: string;
+  email: string;
+  hash: string;
+  nationality?: string | null; // ✅ pode ser null ou undefined
+};
+
+declare module "next-auth" {
+  interface Session {
+    user: {
+      id: string;
+      name: string;
+      email?: string;
+      nationality?: string;
+      // ✅ nacionalidade agora existe
+    };
+  }
+}
+
 export const { handlers, signIn, signOut, auth } = NextAuth({
   secret: process.env.BETTER_AUTH_SECRET,
   providers: [
@@ -20,7 +40,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
           .select()
           .from(users)
           .where(eq(users.email, credentials.email as string))
-          .then((r) => r[0]);
+          .then((r) => r[0] as DBUser);
 
         if (!user) return null;
 
@@ -49,8 +69,9 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
       return session;
     },
     async jwt({ token, user }) {
-      // ⚡ Garante que o token tenha nationality
-      if (user?.nationality) token.nationality = user.nationality;
+      if (user && "nationality" in user && user.nationality) {
+        token.nationality = user.nationality;
+      }
       return token;
     },
   },

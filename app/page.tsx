@@ -91,7 +91,7 @@ export default async function HomePage() {
             </p>
             <CurrencyAmount
               amount={gap > 0 ? gap : 0}
-              nacionalidade={userNationality}
+              nacionalidade={userNationality ?? undefined}
               className="font-black text-5xl sm:text-7xl block"
             />
             {gap <= 0 && (
@@ -99,7 +99,7 @@ export default async function HomePage() {
                 Goal reached! You&apos;re ahead by{" "}
                 <CurrencyAmount
                   amount={Math.abs(gap)}
-                  nacionalidade={userNationality}
+                  nacionalidade={userNationality ?? undefined}
                 />
               </p>
             )}
