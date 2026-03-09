@@ -9,7 +9,7 @@
 ## Key Files
 - `auth.ts` — exports `{ handlers, signIn, signOut, auth }`
 - `lib/db.ts` — Drizzle DB client
-- `lib/schema.ts` — `users`, `budget`, `savings` tables (numeric → string in drizzle)
+- `lib/schema.ts` — `users`, `budget`, `savings`, `kanbanCard` tables (numeric → string in drizzle)
 - `app/globals.css` — Tailwind v4 import + `floatUp` keyframe for bill animation
 - `app/layout.tsx` — Root layout with footer ("jupi-ter" + year)
 - `app/_components/CurrencyAmount.tsx` — shared client component for locale currency formatting
@@ -18,6 +18,8 @@
 - `app/budget/page.tsx` + `BudgetClient.tsx` — Budget backoffice, optimistic updates
 - `app/savings/page.tsx` + `SavingsClient.tsx` — Savings page with bill animation
 - `app/budget/loading.tsx` + `app/savings/loading.tsx` — Skeleton loading states
+- `app/kanban/page.tsx` + `KanbanClient.tsx` — Shared kanban board (no userId), HTML5 DnD, optimistic updates
+- `app/api/kanban/route.ts` — GET/POST/PATCH/DELETE; DELETE is soft-delete (sets deletedAt)
 
 ## Design System (Neobrutalism)
 - Borders: `border-2 border-black` or `border-4 border-black`

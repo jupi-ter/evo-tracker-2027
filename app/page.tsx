@@ -57,6 +57,12 @@ export default async function HomePage() {
               <span className="font-bold text-sm sm:text-base hidden sm:inline">
                 {session!.user!.name}
               </span>
+              <Link
+                href="/kanban"
+                className="border-2 border-black bg-blue-400 font-bold px-4 py-2 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)] hover:translate-x-[2px] hover:translate-y-[2px] hover:shadow-[2px_2px_0px_0px_rgba(0,0,0,1)] transition-all text-sm whitespace-nowrap"
+              >
+                Kanban
+              </Link>
               <form action={doSignOut}>
                 <button
                   type="submit"
